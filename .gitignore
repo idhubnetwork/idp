@@ -1,0 +1,10 @@
+.DS_Store
+
+vendor
+node_modules
+public
+keystore
+.vscode
+
+*.env
+*.log

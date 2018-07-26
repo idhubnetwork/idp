@@ -1,0 +1,42 @@
+{
+  "name": "idp",
+  "version": "1.0.0",
+  "description": "identity provider",
+  "main": "index.js",
+  "scripts": {
+    "watch": "webpack --mode=development --watch",
+    "build": "webpack -p",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/hcmlinj/idp.git"
+  },
+  "author": "Jamie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/hcmlinj/idp/issues"
+  },
+  "homepage": "https://gitlab.com/hcmlinj/idp#README",
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-latest": "^6.24.1",
+    "bulma": "^0.7.1",
+    "css-loader": "^0.28.11",
+    "file-loader": "^1.1.11",
+    "font-awesome": "^4.7.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "style-loader": "^0.21.0",
+    "vue-drag-verify": "^1.0.6",
+    "vue-i18n": "^7.7.0",
+    "vue-loader": "^15.2.2",
+    "vue-router": "^3.0.1",
+    "vue-style-loader": "^4.1.0",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.10.2",
+    "webpack-cli": "^2.1.4"
+  }
+}

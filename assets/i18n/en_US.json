@@ -1,0 +1,18 @@
+{
+    "brand": "IDHub Identity Provider",
+    "signin": "Signin",
+    "logout": "Logout",
+    "org-identity": "Org. ID",
+    "org-identity-register": "Register as Org. Identity",
+    "metadata-manager": "Metadata",
+    "download-metadata": "Download Metadata",
+    "auth-manager": "Authorization",
+    "auth-manager-list": "List Authorizations",
+    "auth-manager-apply": "Apply Authorization",
+    "query": "Query",
+    "pending-list": "Pending List",
+    "register": "Register",
+    "identity": "Identity",
+    "owner": "Wallet",
+    "slogan": "From this moment on, you only need to have an IDHub identity. You no longer need to say hello to the chief, you can easily shuttle in the Amazon rainforest, just one click you can do it."
+}

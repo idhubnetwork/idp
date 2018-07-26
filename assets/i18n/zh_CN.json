@@ -1,0 +1,18 @@
+{
+    "brand": "IDHub 身份提供商",
+    "signin": "登入",
+    "logout": "登出",
+    "org-identity": "组织身份",
+    "org-identity-register": "注册组织身份",
+    "metadata-manager": "元数据管理",
+    "download-metadata": "下载元数据",
+    "auth-manager": "授权管理",
+    "auth-manager-list": "已授权列表",
+    "auth-manager-apply": "申请授权",
+    "query": "查询",
+    "pending-list": "待审列表",
+    "register": "注册",
+    "identity": "身份",
+    "owner": "钱包",
+    "slogan": "打从这一刻起，只需要有个花瓣的身份，不再需要向酋长打招呼，就能轻松穿梭在亚马逊雨林，一键任我行"
+}
