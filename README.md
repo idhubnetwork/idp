@@ -16,6 +16,12 @@ From this moment on, you only need to have an IDHub identity. You no longer need
 - [IDHub SAML API](https://gitlab.com/idhub/saml_idhub_api)
 - [MetaMask](https://metamask.io)
 
+## Configuration
+
+1. DB: [database.yml](https://gitlab.com/idhub/idp/blob/master/database.yml)
+
+2. Global: [config.yml](https://gitlab.com/idhub/idp/blob/master/config.yml)
+
 ## Installation
 
 1. Create a MySQL database with name "idp" and services at localhost:3306.
