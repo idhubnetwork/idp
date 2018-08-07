@@ -1,0 +1,7 @@
+CORSConfig:
+  allowOrigins: 
+    - http://127.0.0.1:8080
+    - http://localhost:8080
+
+SAMLAPI:
+  url: http://58.83.219.136:33333

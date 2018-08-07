@@ -3,6 +3,7 @@ package main
 import (
 	"idp/actions/auth"
 	"idp/actions/authmgr"
+	"idp/actions/cfg"
 	"idp/actions/orgusr"
 	"idp/dbconn"
 	"idp/models/util"
@@ -60,16 +61,17 @@ func backend(port int) http.Handler {
 	e.Validator = &customValidator{validator.New()}
 	key, _ := ioutil.ReadFile(util.GetAbsPath("/keystore/id_rsa.pub"))
 	pub, _ := jwt.ParseRSAPublicKeyFromPEM(key)
+	allowOrigins := &util.Cfg{}
 
 	e.Use(logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"http://127.0.0.1:8080"},
+		AllowOrigins:     allowOrigins.GetConfig("CORSConfig.allowOrigins").List(),
 		AllowCredentials: true,
 	}))
 	e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
 		Skipper: func(c echo.Context) bool {
-			if strings.HasPrefix(c.Path(), "/auth/") {
+			if strings.HasPrefix(c.Path(), "/auth/") || strings.HasPrefix(c.Path(), "/util/") {
 				return true
 			}
 
@@ -97,6 +99,8 @@ func backend(port int) http.Handler {
 	e.GET("/auth-manager/apply-list", authmgr.ApplyList)
 	e.POST("/auth-manager/apply", authmgr.Apply)
 	e.GET("/auth-manager/get-saml-response/:id", authmgr.GetSAMLResponse)
+
+	e.GET("/util/get-config/:key", cfg.GetConfig)
 
 	e.Logger.SetLevel(log.INFO)
 	e.Logger.Infof("backend start at port: %v", port)
