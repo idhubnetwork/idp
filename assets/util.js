@@ -2,11 +2,21 @@
 
 const axios = require('axios')
 
-exports.axios = axios.create({
-    baseURL: location.href.replace(/:[0-9].*/,':1312'),
+const myAxios = axios.create({
+    baseURL: location.href.replace(/:[0-9].*/, ':1312'),
     withCredentials: true
 })
 
-exports.axiosSAML = axios.create({
-    baseURL: 'http://58.83.219.136:33333'
-})
+const getSAMLAPI = async () => {
+    const res = await myAxios.get('/util/get-config/SAMLAPI.url')
+
+    return res.data
+}
+
+(async () => {
+    exports.axios = myAxios
+
+    exports.axiosSAML = axios.create({
+        baseURL: await getSAMLAPI()
+    })
+})()
