@@ -3,6 +3,7 @@ package crypto
 import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/signer/core"
 )
 
@@ -25,4 +26,15 @@ func EcRecover(msg, sig string) (addr string, err error) {
 	}
 
 	return commAddr.String(), nil
+}
+
+func SigPublicKey(msg, sig string) (publickey string, err error) {
+	data := []byte(msg)
+	hash := crypto.Keccak256Hash(data)
+	sigPiblicKey, err := crypto.Ecrecover(hash.Bytes(), hexutil.MustDecode(sig))
+	if err != nil {
+		return "", err
+	}
+	publickey = hexutil.Encode(sigPiblicKey)
+	return publickey, nil
 }

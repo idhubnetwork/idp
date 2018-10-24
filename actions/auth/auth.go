@@ -5,6 +5,7 @@ import (
 	"idp/models/crypto"
 	"idp/models/db"
 	"idp/models/jwt"
+	"../../models/resolver"
 	"net/http"
 	"strings"
 	"time"
@@ -16,6 +17,28 @@ type verify struct {
 	Msg  string `json:"msg" form:"msg"`
 	Sig  string `json:"sig" form:"sig" validate:"required"`
 	Addr string `json:"addr" form:"addr"`
+}
+
+func verifyAuth(msg, id, sig string) (info string, err error) {
+	addr, err := crypto.EcRecover(msg, sig)
+	r, err := resolver.NewResolver("infuraRopsten", "0x1DbF8e4B47EA53a2b932850F7FEC8585C6A9c1d2")
+	owner, err := r.IdentityOwner(id)
+	if err != nil {
+		return "", err
+	}
+	publickey, err := crypto.SigPublicKey(msg, sig)
+	ok, err = r.ValidAuthentication(id, "sigAuth", publickey)
+	if err != nil {
+		return "", err
+	}
+	if strings.ToLower(addr) = strings.ToLower(id) {
+		return "sign by self", nil
+	} else if strings.ToLower(owner) = strings.ToLower(addr) {
+		return "sign by did owner", nil
+	} else if ok {
+		return "sign with authKey", nil
+	}
+	return "", errors.New("verify failed")
 }
 
 // Verify response signed jwt token, if pass
@@ -50,17 +73,11 @@ func Verify(c echo.Context) (err error) {
 	}
 
 	msg, err := db.GetVerifyMsg(v.Addr)
-
-	addr, err := crypto.EcRecover(msg, v.Sig)
+	
+	ok, err := verifyAuth(msg, v.Addr, v.Sig)
 
 	if err != nil {
 		panic(err)
-	}
-
-	if strings.ToLower(addr) != strings.ToLower(v.Addr) {
-		panic(errors.New("verify failed"))
-	} else {
-		addr = v.Addr
 	}
 
 	tokenString, err := jwt.Sign(map[string]interface{}{
@@ -68,7 +85,7 @@ func Verify(c echo.Context) (err error) {
 		"exp":      time.Now().Add(30 * time.Minute).Unix(),
 		"iss":      "IDHub IdP",
 		"sub":      "IDHub identity is all your life",
-		"identity": addr,
+		"identity": v.Addr,
 	})
 
 	if err != nil {
