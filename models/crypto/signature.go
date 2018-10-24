@@ -4,7 +4,6 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/signer/core"
 )
 
 // EcRecover returns the address for the Account that was used to create the signature.
@@ -17,13 +16,16 @@ func EcRecover(msg, sig string) (addr string, err error) {
 		}
 	}()
 
-	personal := &core.SignerAPI{}
-
-	commAddr, err := personal.EcRecover(nil, []byte(msg), hexutil.MustDecode(sig))
+	data := []byte(msg)
+	hash := crypto.Keccak256Hash(data)
+	sigPiblicKey, err := crypto.Ecrecover(hash.Bytes(), hexutil.MustDecode(sig))
+	pubkey, err := crypto.UnmarshalPubkey(sigPiblicKey)
 
 	if err != nil {
 		panic(err)
 	}
+
+	commAddr := crypto.PubkeyToAddress(*pubkey)
 
 	return commAddr.String(), nil
 }

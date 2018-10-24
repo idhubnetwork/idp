@@ -5,7 +5,7 @@ import (
 	"idp/models/crypto"
 	"idp/models/db"
 	"idp/models/jwt"
-	"../../models/resolver"
+	"idp/models/resolver"
 	"net/http"
 	"strings"
 	"time"
@@ -27,13 +27,13 @@ func verifyAuth(msg, id, sig string) (info string, err error) {
 		return "", err
 	}
 	publickey, err := crypto.SigPublicKey(msg, sig)
-	ok, err = r.ValidAuthentication(id, "sigAuth", publickey)
+	ok, err := r.ValidAuthentication(id, "sigAuth", publickey)
 	if err != nil {
 		return "", err
 	}
-	if strings.ToLower(addr) = strings.ToLower(id) {
+	if strings.ToLower(addr) == strings.ToLower(id) {
 		return "sign by self", nil
-	} else if strings.ToLower(owner) = strings.ToLower(addr) {
+	} else if strings.ToLower(owner) == strings.ToLower(addr) {
 		return "sign by did owner", nil
 	} else if ok {
 		return "sign with authKey", nil
@@ -73,8 +73,8 @@ func Verify(c echo.Context) (err error) {
 	}
 
 	msg, err := db.GetVerifyMsg(v.Addr)
-	
-	ok, err := verifyAuth(msg, v.Addr, v.Sig)
+
+	_, err = verifyAuth(msg, v.Addr, v.Sig)
 
 	if err != nil {
 		panic(err)
@@ -102,7 +102,7 @@ func Verify(c echo.Context) (err error) {
 
 	c.SetCookie(&http.Cookie{
 		Name:     "IDHUB_IDENTITY",
-		Value:    addr,
+		Value:    v.Addr,
 		HttpOnly: false,
 		Path:     "/",
 		Expires:  time.Now().Add(30 * time.Minute),
