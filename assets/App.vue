@@ -1,10 +1,10 @@
 <template>
     <div>
-        <NavBar></NavBar>
+        <NavBar :coinbase="coinbase" :identity="identity"></NavBar>
 
         <section class="section">
             <div class="container is-fluid">
-                <router-view :coinbase="coinbase" :identity="identity" :date="date"></router-view>
+                <router-view :coinbase="coinbase" :identity="identity" :date="date" ></router-view>
             </div>
         </section>
 
