@@ -7,6 +7,7 @@ import (
 	"idp/models/db"
 	"idp/models/jwt"
 	"idp/models/resolver"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -23,20 +24,27 @@ type verify struct {
 func verifyAuth(msg, id, sig string) (info string, err error) {
 	addr, err := crypto.EcRecover(msg, sig)
 	fmt.Println("签名地址：" + addr)
+	log.Println("签名地址：" + addr)
 	r, err := resolver.NewResolver("infuraRopsten", "0x1DbF8e4B47EA53a2b932850F7FEC8585C6A9c1d2")
 	owner, err := r.IdentityOwner(id)
 	fmt.Println("Owner地址：" + owner)
+	log.Println("Owner地址：" + owner)
 	if err != nil {
 		fmt.Println(err)
+		log.Println(err)
 		return "", err
 	}
 	publickey, err := crypto.SigPublicKey(msg, sig)
 	fmt.Println("公钥：" + publickey)
+	log.Println("公钥：" + publickey)
 	ok, err := r.ValidAuthentication(id, "sigAuth", publickey)
 	fmt.Println("公钥验证结果如下：")
+	log.Println("公钥验证结果如下：")
 	fmt.Println(ok)
+	log.Println(ok)
 	if err != nil {
 		fmt.Println(err)
+		log.Println(err)
 		return "", err
 	}
 	if strings.ToLower(addr) == strings.ToLower(id) {
@@ -74,12 +82,14 @@ func Verify(c echo.Context) (err error) {
 
 	v := new(verify)
 	fmt.Println(v)
+	log.Println(v)
 	c.Bind(v)
 
 	err = c.Validate(v)
 
 	if err != nil {
 		fmt.Println(err)
+		log.Println(err)
 		panic(err)
 	}
 
@@ -87,9 +97,11 @@ func Verify(c echo.Context) (err error) {
 
 	info, err := verifyAuth(msg, v.Addr, v.Sig)
 	fmt.Println(info)
+	log.Println(info)
 
 	if err != nil {
 		fmt.Println(err)
+		log.Println(err)
 		panic(err)
 	}
 
