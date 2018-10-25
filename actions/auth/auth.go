@@ -2,6 +2,7 @@ package auth
 
 import (
 	"errors"
+	"fmt"
 	"idp/models/crypto"
 	"idp/models/db"
 	"idp/models/jwt"
@@ -21,14 +22,21 @@ type verify struct {
 
 func verifyAuth(msg, id, sig string) (info string, err error) {
 	addr, err := crypto.EcRecover(msg, sig)
+	fmt.Println("签名地址：" + addr)
 	r, err := resolver.NewResolver("infuraRopsten", "0x1DbF8e4B47EA53a2b932850F7FEC8585C6A9c1d2")
 	owner, err := r.IdentityOwner(id)
+	fmt.Println("Owner地址：" + owner)
 	if err != nil {
+		fmt.Println(err)
 		return "", err
 	}
 	publickey, err := crypto.SigPublicKey(msg, sig)
+	fmt.Println("公钥：" + publickey)
 	ok, err := r.ValidAuthentication(id, "sigAuth", publickey)
+	fmt.Println("公钥验证结果如下：")
+	fmt.Println(ok)
 	if err != nil {
+		fmt.Println(err)
 		return "", err
 	}
 	if strings.ToLower(addr) == strings.ToLower(id) {
@@ -45,6 +53,7 @@ func verifyAuth(msg, id, sig string) (info string, err error) {
 func Verify(c echo.Context) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
+			fmt.Println(r)
 			c.SetCookie(&http.Cookie{
 				Name:     "IDHUB_JWT",
 				HttpOnly: true,
@@ -64,19 +73,23 @@ func Verify(c echo.Context) (err error) {
 	}()
 
 	v := new(verify)
+	fmt.Println(v)
 	c.Bind(v)
 
 	err = c.Validate(v)
 
 	if err != nil {
+		fmt.Println(err)
 		panic(err)
 	}
 
 	msg, err := db.GetVerifyMsg(v.Addr)
 
-	_, err = verifyAuth(msg, v.Addr, v.Sig)
+	info, err := verifyAuth(msg, v.Addr, v.Sig)
+	fmt.Println(info)
 
 	if err != nil {
+		fmt.Println(err)
 		panic(err)
 	}
 
@@ -89,6 +102,7 @@ func Verify(c echo.Context) (err error) {
 	})
 
 	if err != nil {
+		fmt.Println(err)
 		panic(err)
 	}
 
