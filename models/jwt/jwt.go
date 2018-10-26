@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"fmt"
+	"log"
 	"idp/models/util"
 	"io/ioutil"
 
@@ -12,7 +13,11 @@ import (
 
 // Sign returns jwt token string
 func Sign(claims map[string]interface{}) (string, error) {
+	log.Println("JWT SIGN START")
+
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims(claims))
+
+	log.Println(token)
 
 	key, err := ioutil.ReadFile(util.GetAbsPath("/keystore/id_rsa"))
 	priv, _ := jwt.ParseRSAPrivateKeyFromPEM(key)

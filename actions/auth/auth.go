@@ -56,6 +56,7 @@ func verifyAuth(msg, id, sig string) (info string, err error) {
 	} else if ok {
 		return "sign with authKey", nil
 	}
+	fmt.Println("VERIFY END")
 	return "", errors.New("verify failed")
 }
 
@@ -83,14 +84,13 @@ func Verify(c echo.Context) (err error) {
 	}()
 
 	v := new(verify)
-	fmt.Println(v)
-	log.Println(v)
 	c.Bind(v)
+	log.Println(v)
+
 
 	err = c.Validate(v)
 
 	if err != nil {
-		fmt.Println(err)
 		log.Println(err)
 		panic(err)
 	}
@@ -98,27 +98,28 @@ func Verify(c echo.Context) (err error) {
 	msg, err := db.GetVerifyMsg(v.Addr)
 
 	info, err := verifyAuth(msg, v.Addr, v.Sig)
-	fmt.Println(info)
-	log.Println(info)
 
 	if err != nil {
-		fmt.Println(err)
-		log.Println(err)
+		log.Println("验证出错:" + err.Error())
 		panic(err)
 	}
+	log.Println(info)
+	addr := v.Addr
+	log.Println(addr)
 
 	tokenString, err := jwt.Sign(map[string]interface{}{
 		"iat":      time.Now().Unix(),
 		"exp":      time.Now().Add(30 * time.Minute).Unix(),
 		"iss":      "IDHub IdP",
 		"sub":      "IDHub identity is all your life",
-		"identity": v.Addr,
+		"identity": addr,
 	})
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println("JWT签名出错:" + err.Error())
 		panic(err)
 	}
+	log.Println(tokenString)
 
 	c.SetCookie(&http.Cookie{
 		Name:     "IDHUB_JWT",
@@ -128,6 +129,8 @@ func Verify(c echo.Context) (err error) {
 		Expires:  time.Now().Add(30 * time.Minute),
 	})
 
+	log.Println("IDHUB_JWT Cookie Success")
+
 	c.SetCookie(&http.Cookie{
 		Name:     "IDHUB_IDENTITY",
 		Value:    v.Addr,
@@ -135,6 +138,8 @@ func Verify(c echo.Context) (err error) {
 		Path:     "/",
 		Expires:  time.Now().Add(30 * time.Minute),
 	})
+
+	log.Println("IDHUB_IDENTITY Cookie Success")
 
 	// return c.String(http.StatusOK, addr)
 	return c.NoContent(http.StatusOK)
@@ -150,6 +155,8 @@ func Booking(c echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusNotAcceptable, err.Error())
 	}
+
+	log.Println("签名消息如下:" + msg)
 
 	return c.String(http.StatusOK, msg)
 }
