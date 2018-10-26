@@ -7,7 +7,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	did "resolver/contracts"
+	did "idp/models/resolver/contracts"
 )
 
 type resolver struct {
