@@ -1,13 +1,6 @@
 <template>
     <div>
         <h1 class="title">{{ $t('signin') }}</h1>
-        <div>
-            <h2> 登录流程提示 {{ date }} </h2>
-            <li> 输入 DID </li>
-            <li> 启动 Metamask </li>
-            <li> 获取安全码 </li>
-            <li> 签名登录 </li>
-        </div>
         <h1 class="subtitle">
             <textarea cols="20" rows="5" class="textarea" type="text" v-model="identity"></textarea>
             <button class="button is-link is-rounded" @click="getBookingMsg" :disabled="identityValidate">{{ $t('get booking massage') }}</button>
