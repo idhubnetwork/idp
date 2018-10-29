@@ -22,10 +22,9 @@ type verify struct {
 }
 
 func verifyAuth(msg, id, sig string) (info string, err error) {
-	fmt.Println("VERIFY START")
 	r, err := resolver.NewResolver("infuraRopsten", "0x1DbF8e4B47EA53a2b932850F7FEC8585C6A9c1d2")
 	owner, err := r.IdentityOwner(id)
-	log.Println("Owner地址：" + owner)
+
 	if err != nil {
 		log.Println(err)
 		return "", err
@@ -37,17 +36,13 @@ func verifyAuth(msg, id, sig string) (info string, err error) {
 		return "", err
 	}
 
-	fmt.Println("公钥：" + publickey)
 	ok, err := r.ValidAuthentication(id, "sigAuth", publickey)
-	fmt.Println("公钥验证结果如下：")
-	fmt.Println(ok)
 
 	addr, err := crypto.EcRecover(msg, sig)
 	if err != nil {
 		log.Println(err)
 		return "", err
 	}
-	fmt.Println("签名地址：" + addr)
 
 	if strings.ToLower(addr) == strings.ToLower(id) {
 		return "sign by self", nil
@@ -56,7 +51,7 @@ func verifyAuth(msg, id, sig string) (info string, err error) {
 	} else if ok {
 		return "sign with authKey", nil
 	}
-	fmt.Println("VERIFY END")
+
 	return "", errors.New("verify failed")
 }
 
@@ -85,8 +80,6 @@ func Verify(c echo.Context) (err error) {
 
 	v := new(verify)
 	c.Bind(v)
-	log.Println(v)
-
 
 	err = c.Validate(v)
 
@@ -97,15 +90,14 @@ func Verify(c echo.Context) (err error) {
 
 	msg, err := db.GetVerifyMsg(v.Addr)
 
-	info, err := verifyAuth(msg, v.Addr, v.Sig)
+	_, err := verifyAuth(msg, v.Addr, v.Sig)
 
 	if err != nil {
 		log.Println("验证出错:" + err.Error())
 		panic(err)
 	}
-	log.Println(info)
+
 	addr := v.Addr
-	log.Println(addr)
 
 	tokenString, err := jwt.Sign(map[string]interface{}{
 		"iat":      time.Now().Unix(),
@@ -119,7 +111,6 @@ func Verify(c echo.Context) (err error) {
 		log.Println("JWT签名出错:" + err.Error())
 		panic(err)
 	}
-	log.Println(tokenString)
 
 	c.SetCookie(&http.Cookie{
 		Name:     "IDHUB_JWT",
@@ -129,8 +120,6 @@ func Verify(c echo.Context) (err error) {
 		Expires:  time.Now().Add(30 * time.Minute),
 	})
 
-	log.Println("IDHUB_JWT Cookie Success")
-
 	c.SetCookie(&http.Cookie{
 		Name:     "IDHUB_IDENTITY",
 		Value:    v.Addr,
@@ -138,8 +127,6 @@ func Verify(c echo.Context) (err error) {
 		Path:     "/",
 		Expires:  time.Now().Add(30 * time.Minute),
 	})
-
-	log.Println("IDHUB_IDENTITY Cookie Success")
 
 	// return c.String(http.StatusOK, addr)
 	return c.NoContent(http.StatusOK)
@@ -155,8 +142,6 @@ func Booking(c echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusNotAcceptable, err.Error())
 	}
-
-	log.Println("签名消息如下:" + msg)
 
 	return c.String(http.StatusOK, msg)
 }
