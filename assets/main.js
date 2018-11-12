@@ -39,7 +39,7 @@ const router = new VueRouter({
                 { path: 'apply', component: AuthManagerApply }
             ]
         }
-    ],
+    ]
 })
 
 router.beforeEach((to, from, next) => {

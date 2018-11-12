@@ -90,7 +90,7 @@ func Verify(c echo.Context) (err error) {
 
 	msg, err := db.GetVerifyMsg(v.Addr)
 
-	_, err := verifyAuth(msg, v.Addr, v.Sig)
+	_, err = verifyAuth(msg, v.Addr, v.Sig)
 
 	if err != nil {
 		log.Println("验证出错:" + err.Error())
