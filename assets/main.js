@@ -39,7 +39,7 @@ const router = new VueRouter({
                 { path: 'apply', component: AuthManagerApply }
             ]
         }
-    ],
+    ]
 })
 
 router.beforeEach((to, from, next) => {
@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
 
 const i18n = new VueI18n({
     locale: 'zh_CN',
-    fallbackLocale: 'zh_CN',
+    fallbackLocale: 'en_US',
     messages: {
         'zh_TW': require('@/i18n/zh_TW.json'),
         'zh_CN': require('@/i18n/zh_CN.json'),

@@ -1,9 +1,30 @@
 package crypto
 
 import (
+	"fmt"
 	"testing"
 )
 
+type AuthTest struct {
+	Id  string
+	Msg string
+	Sig string
+}
+
+var T = AuthTest{
+	"0x49dBa8f906c745B0a82f4D21E02BAFD7Df1a0be4",
+	"IDHub: 0x29F20242051AccDA50D52a7E272A5F23237e4696 @ 2018-10-25 14:46:44.384195779 +0800 CST m=+30.668203170",
+	"0x6da7f9726b43c7b1158d93e14bfcf11caf134d3a78e256b80ee65c9531ae02c81d7222227a84d746484b93d8b492ab12f4ab78b790088ea01675f4750b59228c1b",
+}
+
+
+
+var Te = AuthTest{
+	"0x49dBa8f906c745B0a82f4D21E02BAFD7Df1a0be4",
+	"IDHub: 0x29F20242051AccDA50D52a7E272A5F23237e4696 @ 2018-10-25 14:46:44.384195779 +0800 CST m=+30.668203170",
+	"0x200db3e32e8533fb1d6e81602c6d301879a000f44ad705bca174603467289be652fb6d3e52aef636a2f543a2ebf436d38a24514367739c4a0d6ca458424287371b",
+}
+/*
 func TestEcRecover(t *testing.T) {
 	type args struct {
 		msg string
@@ -61,4 +82,33 @@ func TestEcRecover(t *testing.T) {
 			}
 		})
 	}
+}
+*/
+func TestSigPublicKey(t *testing.T) {
+	key, err := SigPublicKey(Te.Msg, Te.Sig)
+	if err != nil {
+		fmt.Println(err)
+		t.Error(err)
+		t.Fail()
+	}
+	fmt.Println(key)
+}
+
+func TestEcrecover(t *testing.T) {
+	addr, err := EcRecover(Te.Msg, Te.Sig)
+	if err != nil {
+		fmt.Println(err)
+		t.Error(err)
+		t.Fail()
+	}
+	fmt.Println(addr)
+}
+
+func TestVerifyAuth(t *testing.T) {
+	ok, err := VerifyAuth(Te.Msg, Te.Id, Te.Sig)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+	}
+	fmt.Println(ok)
 }

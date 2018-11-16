@@ -8,3 +8,4 @@ keystore
 
 *.env
 *.log
+/docs/developer_guide_CN.md

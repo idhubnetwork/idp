@@ -2,9 +2,12 @@ package auth
 
 import (
 	"errors"
+	"fmt"
 	"idp/models/crypto"
 	"idp/models/db"
 	"idp/models/jwt"
+	"idp/models/resolver"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -18,10 +21,45 @@ type verify struct {
 	Addr string `json:"addr" form:"addr"`
 }
 
+func verifyAuth(msg, id, sig string) (info string, err error) {
+	r, err := resolver.NewResolver("infuraRopsten", "0x1DbF8e4B47EA53a2b932850F7FEC8585C6A9c1d2")
+	owner, err := r.IdentityOwner(id)
+
+	if err != nil {
+		log.Println(err)
+		return "", err
+	}
+
+	publickey, err := crypto.SigPublicKey(msg, sig)
+	if err != nil {
+		log.Println(err)
+		return "", err
+	}
+
+	ok, err := r.ValidAuthentication(id, "sigAuth", publickey)
+
+	addr, err := crypto.EcRecover(msg, sig)
+	if err != nil {
+		log.Println(err)
+		return "", err
+	}
+
+	if strings.ToLower(addr) == strings.ToLower(id) {
+		return "sign by self", nil
+	} else if strings.ToLower(owner) == strings.ToLower(addr) {
+		return "sign by did owner", nil
+	} else if ok {
+		return "sign with authKey", nil
+	}
+
+	return "", errors.New("verify failed")
+}
+
 // Verify response signed jwt token, if pass
 func Verify(c echo.Context) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
+			fmt.Println(r)
 			c.SetCookie(&http.Cookie{
 				Name:     "IDHUB_JWT",
 				HttpOnly: true,
@@ -46,22 +84,20 @@ func Verify(c echo.Context) (err error) {
 	err = c.Validate(v)
 
 	if err != nil {
+		log.Println(err)
 		panic(err)
 	}
 
 	msg, err := db.GetVerifyMsg(v.Addr)
 
-	addr, err := crypto.EcRecover(msg, v.Sig)
+	_, err = verifyAuth(msg, v.Addr, v.Sig)
 
 	if err != nil {
+		log.Println("验证出错:" + err.Error())
 		panic(err)
 	}
 
-	if strings.ToLower(addr) != strings.ToLower(v.Addr) {
-		panic(errors.New("verify failed"))
-	} else {
-		addr = v.Addr
-	}
+	addr := v.Addr
 
 	tokenString, err := jwt.Sign(map[string]interface{}{
 		"iat":      time.Now().Unix(),
@@ -72,6 +108,7 @@ func Verify(c echo.Context) (err error) {
 	})
 
 	if err != nil {
+		log.Println("JWT签名出错:" + err.Error())
 		panic(err)
 	}
 
@@ -85,7 +122,7 @@ func Verify(c echo.Context) (err error) {
 
 	c.SetCookie(&http.Cookie{
 		Name:     "IDHUB_IDENTITY",
-		Value:    addr,
+		Value:    v.Addr,
 		HttpOnly: false,
 		Path:     "/",
 		Expires:  time.Now().Add(30 * time.Minute),

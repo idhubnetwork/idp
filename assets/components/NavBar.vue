@@ -2,7 +2,9 @@
     <nav class="navbar is-transparent">
         <div class="navbar-brand">
             <router-link class="navbar-item" to="/">
-                <img :src="logo" alt=""> &nbsp;&nbsp; {{ $t('brand') }}
+                <img :src="logo" alt="">
+                <label class="has-text-white">&nbsp;&nbsp; {{ $t('brand') }}</label>
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
             </router-link>
 
             <div class="navbar-burger burger" @click="isActiveToggle">
@@ -11,49 +13,46 @@
                 <span></span>
             </div>
         </div>
-
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
         <div class="navbar-menu" :class="{ 'is-active': isActive }">
             <div class="navbar-start is-hoverable">
                 <router-link class="navbar-item" to="/signin" @click.native="isActiveToggle" exact>{{ $t('signin') }}</router-link>
                 <router-link class="navbar-item" to="/metadata-manager" @click.native="isActiveToggle" exact>{{ $t('metadata-manager') }}</router-link>
-                <router-link class="navbar-item" to="/org-identity" @click.native="isActiveToggle">{{ $t('org-identity') }}</router-link>
-                <router-link class="navbar-item" to="/auth-manager" @click.native="isActiveToggle">{{ $t('auth-manager') }}</router-link>
+                <router-link class="navbar-item" to="/org-identity/register" @click.native="isActiveToggle">{{ $t('org-identity') }}</router-link>
+                <router-link class="navbar-item" to="/auth-manager/list" @click.native="isActiveToggle">{{ $t('auth-manager') }}</router-link>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <p class="control">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>{{ $t('identity') }}:</td>
+                                    <td>{{ identity }}</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ $t('owner') }}:</td>
+                                    <td>{{ coinbase }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+
+                    &nbsp;&nbsp;
+
+                    <button class="button is-rounded is-small" v-if="auth" @click="logout">{{ $t('logout') }}</button>
+                </div>
+            </div>
+            <div class="navbar-end is-hoverable buttons has-addons">
+                <button class="button is-rounded is-small" :disabled="isCurrent('zh_CN')" @click="set('zh_CN')">簡</button>
+                <button class="button is-rounded is-small" :disabled="isCurrent('zh_TW')" @click="set('zh_TW')">繁</button>
+                <button class="button is-rounded is-small" :disabled="isCurrent('en_US')" @click="set('en_US')">EN</button>
             </div>
         </div>
 
-        <div class="navbar-end">
-            <div class="navbar-item">
-                <p class="control">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>{{ $t('identity') }}:</td>
-                                <td>{{ identity }}</td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t('owner') }}:</td>
-                                <td>{{ coinbase }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </p>
 
-                &nbsp;&nbsp;
-
-                <button class="button is-rounded is-small" v-if="auth" @click="logout">{{ $t('logout') }}</button>
-            </div>
-        </div>
-
-        <div class="navbar-end is-hoverable buttons has-addons">
-            <button class="button is-rounded is-small" :disabled="isCurrent('zh_CN')" @click="set('zh_CN')">簡</button>
-            <button class="button is-rounded is-small" :disabled="isCurrent('zh_TW')" @click="set('zh_TW')">繁</button>
-            <button class="button is-rounded is-small" :disabled="isCurrent('en_US')" @click="set('en_US')">EN</button>
-        </div>
     </nav>
 </template>
 
@@ -75,6 +74,7 @@ export default {
             return this.$i18n.locale === locale
         }, set(locale) {
             this.$i18n.locale = locale
+            localStorage.setItem('language', locale)
         }, isActiveToggle() {
             this.isActive = !this.isActive
         }, logout() {
@@ -86,6 +86,13 @@ export default {
     }, computed: {
         auth() {
             return document.cookie.indexOf('IDHUB_IDENTITY=') >= 0
+        }
+    }, mounted () {
+        if (!localStorage.getItem('language')) {
+            this.$i18n.locale = 'en_US'
+        }
+        else {
+            this.$i18n.locale = localStorage.getItem('language')
         }
     }
 }
@@ -140,13 +147,16 @@ a.navbar-item {
 .navbar-burger {
   color: #ffffff;
 }
-
-.navbar-menu {
-  &.is-active {
-    background-color: transparent;
-  }
+a.navbar-item:hover, a.navbar-item.is-active, .navbar-link:hover, .navbar-link.is-active{
+  background-color: transparent;
 }
 
+.navbar-menu {
+  background-color: transparent;
+}
+.navbar-item:hover {
+  background-color: transparent;
+}
 p.control {
   font-size: 13px;
   font-weight: normal;

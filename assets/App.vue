@@ -4,7 +4,7 @@
 
         <section class="section">
             <div class="container is-fluid">
-                <router-view :coinbase="coinbase" :identity="identity"></router-view>
+                <router-view :coinbase="coinbase" :identity="identity" :date="date" ></router-view>
             </div>
         </section>
 
@@ -21,6 +21,7 @@ export default {
         NavBar, FooterBar
     }, data() {
         return {
+            date: new Date().toLocaleString(),
             identity: document.cookie.split(';').filter(c => c.startsWith('IDHUB_IDENTITY')).join('').split('=')[1],
             coinbase: ''
         }

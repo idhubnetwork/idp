@@ -2,8 +2,12 @@
     <div>
         <h1 class="title">{{ $t('signin') }}</h1>
         <h1 class="subtitle">
+            <textarea cols="20" rows="5" class="textarea" type="text" v-model="identity"></textarea>
+            <button class="button is-link is-rounded" @click="getBookingMsg" :disabled="identityValidate">{{ $t('get booking massage') }}</button>
+        </h1>
+        <h1 class="subtitle">
             <textarea cols="20" rows="5" class="textarea" type="text" v-model="message"></textarea>
-            <button class="button is-link is-rounded" @click="sign" :disabled="validate">{{ $t('signin') }}</button>
+            <button class="button is-link is-rounded" @click="sign" :disabled="messageValidate">{{ $t('signin') }}</button>
         </h1>
         <h1 class="subtitle">
             <textarea class="textarea" type="text" v-model="sigStringify" readonly></textarea>
@@ -16,18 +20,26 @@ import { axios } from '@/util'
 
 export default {
     props: [
-        'coinbase'
+        'coinbase',
+        'identity',
+        'date'
     ], data() {
         return {
             message: '',
             signature: {}
         }
     }, mounted() {
-        if (this.coinbase !== '' && typeof this.coinbase != 'undefined') {
-            this.getBookingMsg()
-        }
+        // if (this.coinbase !== '' && typeof this.coinbase != 'undefined') {
+        //     this.getBookingMsg()
+        // }
     }, computed: {
-        validate() {
+        identityValidate() {
+            if (this.identity === '' || this.identity === 'undefined') {
+                console.log('here' + this.identity)
+                return true
+            }
+            return this.coinbase === null || this.coinbase === ''
+        }, messageValidate() {
             if (this.message === '') return true
             return this.coinbase === null || this.coinbase === ''
         }, sigStringify() {
@@ -39,7 +51,8 @@ export default {
                 if (err) this.signature = err
                 if (res) {
                     this.signature = {
-                        address: this.coinbase,
+                        // address: this.coinbase,
+                        address: this.identity,
                         msg: this.message,
                         sig: res,
                         version: "3",
@@ -47,7 +60,8 @@ export default {
                     }
 
                     axios.post('/auth/verify', {
-                        addr: this.coinbase,
+                        // addr: this.coinbase,
+                        addr: this.identity,
                         sig: this.signature.sig
                     }).then(res => {
                         this.signature = Object.assign({}, this.signature, { verified: 'OK' })
@@ -60,18 +74,21 @@ export default {
             })
         },
         getBookingMsg() {
+            console.log('here2, send booking massage\n' + 'identity is ' + this.identity + '\nCoinbase is ' + this.coinbase)
             axios.post('/auth/booking', {
-                addr: this.coinbase
-            }).then(res =>
+                // addr: this.coinbase
+                addr: this.identity
+            }).then(res => {
                 this.message = res.data
-            ).catch(
+                console.log('here is the message' + this.message)
+            }).catch(
                 err => console.log(err)
             )
         }
     }, watch: {
-        coinbase() {
-            this.getBookingMsg()
-        }
+        // coinbase() {
+        //     this.getBookingMsg()
+        // }
     }
 }
 </script>
