@@ -3,8 +3,6 @@
 const axios = require('axios')
 
 const myAxios = axios.create({
-    // baseURL: this.location.href.protocol + '//' + this.location.href.host + ':1312/',
-    // baseURL: 'http://localhost:1312/',
     baseURL: location.protocol + '//' + location.hostname + ':1312/',
     withCredentials: true
 })
