@@ -2,6 +2,7 @@ package authmgr
 
 import (
 	"fmt"
+	"idp/models/util"
 	"idp/dbconn"
 	"idp/models/db"
 	"idp/models/jwt"
@@ -127,7 +128,9 @@ func GetSAMLResponse(c echo.Context) error {
 
 	fmt.Println(pl)
 
-	_, body, errs := gorequest.New().Post("http://58.83.219.136:33333/getSamlResponse").Query(pl).End()
+	cfg := &util.Cfg{}
+
+	_, body, errs := gorequest.New().Post(cfg.GetConfig("SAMLAPI.url").String()+"/getSamlResponse").Query(pl).End()
 
 	if errs != nil {
 		return c.JSON(http.StatusBadRequest, errs)

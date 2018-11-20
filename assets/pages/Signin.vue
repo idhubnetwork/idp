@@ -74,7 +74,6 @@ export default {
             })
         },
         getBookingMsg() {
-            console.log('here2, send booking massage\n' + 'identity is ' + this.identity + '\nCoinbase is ' + this.coinbase)
             axios.post('/auth/booking', {
                 // addr: this.coinbase
                 addr: this.identity

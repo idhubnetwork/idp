@@ -8,7 +8,7 @@ const myAxios = axios.create({
 })
 
 const getSAMLAPI = async () => {
-    const res = await myAxios.get('/util/get-config/SAMLAPI.url')
+    const res = await myAxios.get('util/get-config/SAMLAPI.url')
 
     return res.data
 }
