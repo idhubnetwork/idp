@@ -129,8 +129,9 @@ func GetSAMLResponse(c echo.Context) error {
 	fmt.Println(pl)
 
 	cfg := &util.Cfg{}
+	url := cfg.GetConfig("SAMLAPI.url").String()+"/getSamlResponse"
 
-	_, body, errs := gorequest.New().Post(cfg.GetConfig("SAMLAPI.url").String()+"/getSamlResponse").Query(pl).End()
+	_, body, errs := gorequest.New().Post(url).Query(pl).End()
 
 	if errs != nil {
 		return c.JSON(http.StatusBadRequest, errs)
