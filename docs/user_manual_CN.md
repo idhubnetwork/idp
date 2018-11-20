@@ -23,7 +23,7 @@ AWS-Demo 是一个基于以太坊区块链上的 IDHub 去中心化身份 (DID) 
 
 > 提示：
 1. 想成为我们当中的一员或者有任何问题请与我们联系: support@idhub.network。
-2. [英文版用户手册](./user_manual_CN.md)仍在完善中，欢迎提PR.
+2. [英文版用户手册](./user_manual_EN.md)仍在完善中，欢迎提PR.
 
 ### 2.2 使用DID登入
 安装好 metamask 钱包后，我们用它来登录“IDHub 身份提供商”的管理平台。

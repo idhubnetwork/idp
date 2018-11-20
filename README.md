@@ -9,6 +9,7 @@ From this moment on, you only need to have an IDHub identity. You no longer need
 
 ## User Manual
 - [中文版](docs/user_manual_CN.md)
+- [English Version](docs/user_manual_EN.md)
 
 ## Requirements
 
