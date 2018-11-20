@@ -3,7 +3,7 @@
         <h1 class="title">{{ $t('signin') }}</h1>
         <h1 class="subtitle">
             <textarea cols="20" rows="5" class="textarea" type="text" v-model="identity"></textarea>
-            <button class="button is-link is-rounded" @click="getBookingMsg" :disabled="identityValidate">{{ $t('get booking massage') }}</button>
+            <button class="button is-link is-rounded" @click="getBookingMsg" :disabled="identityValidate">{{ $t('Get Booking Message') }}</button>
         </h1>
         <h1 class="subtitle">
             <textarea cols="20" rows="5" class="textarea" type="text" v-model="message"></textarea>

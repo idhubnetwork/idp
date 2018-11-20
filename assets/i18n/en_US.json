@@ -7,7 +7,7 @@
     "metadata-manager": "Metadata",
     "download-metadata": "Download Metadata",
     "auth-manager": "Authorization",
-    "auth-manager-list": "List Authorizations",
+    "auth-manager-list": "Authorizations List",
     "auth-manager-apply": "Apply Authorization",
     "query": "Query",
     "pending-list": "Pending List",
