@@ -3,11 +3,11 @@
 ## Contents
 - [1 Introduction](#1-Introduction)  
 - [2 How to Use](#2-How-to-Use)
-  - [2.1 Get Started](#21-Get-Started-:-Obtain-Your-First-DID-Key)
-  - [2.2 Login with DID](#22-Login-with-DID)
-  - [2.3 Login AWS as Ordinary User](#23-Login-AWS-as-Ordinary-User)
-  - [2.4 AWS SAML Configuration](#24-AWS-SAML-Configuration)
-  - [2.5 Register and Setup for Organizational User](#25-Register-and-Setup-for-Organizational-User)
+  - [2.1 Get Started](#21-get-started-obtain-your-first-did-key)
+  - [2.2 Login with DID](#22-login-with-did)
+  - [2.3 Login AWS as Ordinary User](#23-login-aws-as-ordinary-user)
+  - [2.4 AWS SAML Configuration](#24-aws-saml-configuration)
+  - [2.5 Register and Setup for Organizational User](#25-register-and-setup-for-organizational-user)
 
 ## 1 Introduction
 
