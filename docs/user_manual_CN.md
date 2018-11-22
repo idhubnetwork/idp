@@ -19,14 +19,14 @@ AWS-Demo 是一个基于以太坊区块链上的 IDHub 去中心化身份 (DID) 
 ## 2 如何使用
 
 ### 2.1 入门: 获得你的第一把 DID 钥匙
-在 IDHub DID 中，任何以太坊地址默认是其同名 DID，这意味着只要你拥有以太坊钱包就获得了 DID。AWS-Demo 现已支持 metamask 钱包登录。下载 [metamask](https://metamask.io)，获取你的第一把 DID 钥匙吧。
+在 IDHub DID 中，任何以太坊地址默认是其同名 DID，这意味着只要你拥有以太坊钱包就获得了 DID。AWS-Demo 现已支持 metamask 钱包登录。下载 [metamask](https://metamask.io) (谷歌浏览器插件)，获取你的第一把 DID 钥匙吧。
 
 > 提示：
 1. 想成为我们当中的一员或者有任何问题请与我们联系: support@idhub.network。
 2. [英文版用户手册](./user_manual_EN.md)仍在完善中，欢迎提PR.
 
 ### 2.2 使用DID登入
-安装好 metamask 钱包后，我们用它来登录“IDHub 身份提供商”的管理平台。
+安装好 metamask 钱包后，我们用它来登录 "[IDHub 身份提供商](http://aws-demo.idhub.network)"的管理平台。
  1. 进入 ‘登入’ 页面并输入你的DID
  ![login_fig1](images/login_fig1.jpg)
  1. 点击 ‘get booking massage’ 按钮获得签名信息

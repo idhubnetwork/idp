@@ -5,4 +5,4 @@ CORSConfig:
 
 SAMLAPI:
   # url: http://58.83.219.136:33333
-  url: http://localhost:33333
+  url: http://localhost:3000

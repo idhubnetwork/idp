@@ -18,7 +18,7 @@ AWS-Demo is an application, which utilizes Ethereum-based IDHub Decentralized Id
 
 ## 2 How to Use
 ### 2.1 Get Started: Obtain Your First DID Key
-In IDHub DID, any ethereum address is default recognized as its DID key, which means if you own an ethereum wallet, you have already obtained DID. AWS-Demo now can support Metamask wallet login. Download [Metamask](https://metamask.io), and obtain your first DID key.
+In IDHub DID, any ethereum address is default recognized as its DID key, which means if you own an ethereum wallet, you have already obtained DID. AWS-Demo now can support Metamask wallet login. Download [Metamask](https://metamask.io) (Google Chrome Plugin), and obtain your first DID key.
 
 ### 2.2 Login with DID
 > **Tips:**
@@ -26,7 +26,7 @@ In IDHub DID, any ethereum address is default recognized as its DID key, which m
 2. Screenshots below are in Chinese at present. Welcome to push requests on github if you have got the English ones.
 3. Want to become one of us (contributor, or anything), or if you have any question, please contact: support@idhub.network
 
-After installing Metamask wallet, let’s use it to login ‘IDHub Identity Provider’ management platform.
+After installing Metamask wallet, let’s use it to login ‘[IDHub Identity Provider](http://aws-demo.idhub.network)’ management platform.
 1.	Access to ‘Signin’ page and enter your DID 
  ![login_fig1](images/login_fig1.jpg)
 2.	Click ‘Get Booking Message’ to obtain sign information
